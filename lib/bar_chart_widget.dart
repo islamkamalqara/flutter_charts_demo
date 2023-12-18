@@ -1,4 +1,7 @@
 
+import 'dart:async';
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -19,18 +22,26 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   _BarChartWidgetState({required this.points});
 
   @override
+  void initState() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState((){});
+    });
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 2,
       child: BarChart(
         BarChartData(
             barGroups: _chartGroups(),
+
             borderData: FlBorderData(
                 border: const Border(bottom: BorderSide(), left: BorderSide())),
             gridData: FlGridData(show: false),
             titlesData: FlTitlesData(
               bottomTitles: AxisTitles(sideTitles: _bottomTitles),
-              leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+           //   leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
               topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
               rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             ),
@@ -38,8 +49,24 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       ),
     );
   }
-
   List<BarChartGroupData> _chartGroups() {
+    return points!.map((point) {
+      final double y = (Random().nextBool() ? 1 : -1) * point.y!;
+      return     BarChartGroupData(
+          x: point.x!.toInt(),
+          barRods: [
+            BarChartRodData(
+              toY: point.y!,
+              color: y > 0 ? Colors.blue : Colors.red,
+            )
+          ]
+      );
+    }
+
+
+    ).toList();
+  }
+/*  List<BarChartGroupData> _chartGroups() {
     return points.map((point) =>
       BarChartGroupData(
         x: point.x.toInt(),
@@ -51,7 +78,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       )
 
     ).toList();
-  }
+  }*/
 
   SideTitles get _bottomTitles => SideTitles(
     showTitles: true,

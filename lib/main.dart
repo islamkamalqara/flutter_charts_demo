@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart_demo/charts/bar_chart_sample.dart';
+import 'package:flutter_chart_demo/charts/line_chart_sample.dart';
 
 import 'package:flutter_chart_demo/data/price_point.dart';
 import 'package:flutter_chart_demo/data/sector.dart';
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Chart',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -48,15 +51,18 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              LineChartWidget(pricePoints),
-              PieChartWidget(industrySectors),
-              Column(
-                children: industrySectors
-                    .map<Widget>((sector) => SectorRow(sector))
-                    .toList(),
-              ),
-              const Padding(padding: EdgeInsets.all(60)),
-              BarChartWidget(points: pricePoints),
+
+        Row(
+             children: [
+               Expanded(child:  BarChartWidget(points: pricePoints),),
+               Expanded(child: BarChartSample()),
+             ],
+           ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.1,),
+              LineChartSample()
+
+              //
+              //
             ],
           ),
         ),
